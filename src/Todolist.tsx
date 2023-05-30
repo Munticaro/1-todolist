@@ -47,4 +47,3 @@ export const Todolist=(props:PropsType)=>{
         </div>
     );
 }
-
