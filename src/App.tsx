@@ -1,54 +1,59 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from "./Todolist";
+import {v1} from "uuid";
 
 export type FilterValuesType = "all" | "active" | "completed"
 
 function App() {
 
-    const truck= 'What to learn1 Sasha'
-    // const truckNew= 'What to learn TripleAlex'
-
-    let [tasks1, setTasks1] = useState< Array<TaskType> >([
-        { id: 1, title: "HTML&CSS", isDone: true },
-        { id: 2, title: "JS", isDone: true },
-        { id: 3, title: "ReactJS", isDone: false },
-        { id: 4, title: "Redux", isDone: false }
+    let [tasks, setTasks] = useState<Array<TaskType>>([
+        {id: v1(), title: "HTML&CSS", isDone: true},
+        {id: v1(), title: "JS", isDone: true},
+        {id: v1(), title: "ReactJS", isDone: false},
+        {id: v1(), title: "Redux", isDone: false},
+        {id: v1(), title: "GraphQL", isDone: false}
     ]);
+
     let [filter, setFilter] = useState<FilterValuesType>("active");
 
-    function removeTask(id: number) {
-        let filteredTasks1 = tasks1.filter( el => el.id !== id)
-        setTasks1(filteredTasks1)
+    function removeTasks(id: string) {
+        let filteredTasks = tasks.filter(el => el.id !== id)
+        setTasks(filteredTasks)
+    }
+
+    const addTask = (title: string)=> {
+        let newTask = {
+            id: v1(),
+            title: title,
+            isDone: false
+        }
+        let newTasks = [newTask, ...tasks];
+        setTasks(newTasks)
     }
 
     function changeFilter(value: FilterValuesType) {
         setFilter(value);
     }
 
-    let tasksForTodolist = tasks1;
+    let tasksForTodolist = tasks;
     if (filter === "completed") {
-        tasksForTodolist = tasks1.filter(el => el.isDone === true);
+        tasksForTodolist = tasks.filter(el => el.isDone); /// isDone === true
     }
     if (filter === "active") {
-        tasksForTodolist = tasks1.filter(el => el.isDone === false);
+        tasksForTodolist = tasks.filter(el => !el.isDone); /// isDone === false
     }
-    // const tasks2 = [
-    //     { id: 1, title: "Hello world", isDone: true },
-    //     { id: 2, title: "I am Happy", isDone: false },
-    //     { id: 3, title: "Yo", isDone: false }
-    // ]
+
 
     return (
         <div className="App">
             <Todolist
-                truck={truck}
-                truck2={100200}
+                title={"What to learn"}
+                removeTasks={removeTasks}
                 tasks={tasksForTodolist}
-                removeTasks1={removeTask}
                 changeFilter={changeFilter}
+                addTask={addTask}
             />
-            {/*<Todolist truck={truckNew} truck3={true} tasks={tasks2}/>*/}
         </div>
     );
 
